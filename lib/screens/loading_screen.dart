@@ -1,16 +1,42 @@
 import 'package:flutter/material.dart';
 
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:notes/screens/login_screen.dart';
 import '../models/colors.dart';
+import '../providers/login_data.dart';
 import './home_screen.dart';
 
-class LoadingScreen extends StatelessWidget {
+class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
+
+  @override
+  State<LoadingScreen> createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  bool isLogin = false;
+
+  getLoginState() async {
+    await LocalDataSaver.getLogData().then((value) {
+      setState(() {
+        isLogin = value.toString() == "null";
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLoginState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      (isLogin)
+          ? Navigator.pushReplacementNamed(context, HomeScreen.routeName)
+          : Navigator.pushReplacementNamed(context, Login.routeName);
     });
 
     return Scaffold(

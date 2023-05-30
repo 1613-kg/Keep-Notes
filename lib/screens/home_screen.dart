@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes/providers/db.dart';
+import 'package:notes/providers/login_data.dart';
 import 'package:notes/screens/write_note_screen.dart';
 import 'package:notes/widgets/loading.dart';
 import 'package:notes/widgets/notes_view_list.dart';
@@ -21,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
   List<MyNotes> notesList = [];
+  String? imgUrl;
   GlobalKey<ScaffoldState> _drawerkey = GlobalKey();
   @override
   void initState() {
@@ -31,9 +33,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future getAllNotes() async {
     this.notesList = await NotesDatabase.instance.getAllNotes();
-    setState(() {
-      isLoading = false;
-    });
+    LocalDataSaver.getImg().then(
+      (value) {
+        if (this.mounted) {
+          setState(() {
+            imgUrl = value;
+          });
+        }
+      },
+    );
+    if (this.mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Widget build(BuildContext context) {
@@ -70,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? LongPressed()
                           : SearchBox(
                               _drawerkey,
+                              imgUrl.toString(),
                             ),
                       SizedBox(
                         height: 10,

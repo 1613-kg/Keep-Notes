@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:notes/screens/edit_note_screen.dart';
+import 'package:notes/screens/login_screen.dart';
 import 'package:notes/screens/search_screen.dart';
 import 'package:notes/screens/write_note_screen.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/loading_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,6 +27,7 @@ class MyApp extends StatelessWidget {
         WriteNote.routeName: (ctx) => WriteNote(),
         //EditNoteScreen.routeName: (ctx) => EditNoteScreen(),
         SearchScreen.routeName: (ctx) => SearchScreen(),
+        Login.routeName: (ctx) => Login(),
       },
     );
   }
