@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:notes/providers/auth.dart';
+import 'package:notes/providers/login_data.dart';
 import 'package:notes/screens/home_screen.dart';
+import 'package:notes/screens/login_screen.dart';
 import 'package:notes/screens/search_screen.dart';
 
 import '../models/colors.dart';
 
 class SearchBox extends StatefulWidget {
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
-  SearchBox(this.drawerKey);
+  String imgUrl;
+  SearchBox(this.drawerKey, this.imgUrl);
 
   @override
   State<SearchBox> createState() => _SearchBarState();
@@ -126,9 +130,23 @@ class _SearchBarState extends State<SearchBox> {
                         SizedBox(
                           width: 9,
                         ),
-                        CircleAvatar(
-                          radius: 10,
-                          backgroundColor: Colors.white,
+                        GestureDetector(
+                          onTap: () {
+                            signOut();
+                            LocalDataSaver.saveLoginData(false);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login()));
+                          },
+                          child: CircleAvatar(
+                            radius: 10,
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                NetworkImage(widget.imgUrl.toString()),
+                            onBackgroundImageError: (Object, stackTrace) =>
+                                print('ok'),
+                          ),
                         )
                       ],
                     ),
