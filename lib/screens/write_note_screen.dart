@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:notes/models/notes_model.dart';
 import 'package:notes/providers/db.dart';
 import 'package:notes/screens/home_screen.dart';
@@ -16,6 +17,8 @@ class WriteNote extends StatefulWidget {
 class _WriteNoteState extends State<WriteNote> {
   TextEditingController title = new TextEditingController();
   TextEditingController content = new TextEditingController();
+
+  var uuid = Uuid();
 
   @override
   void dispose() {
@@ -37,7 +40,10 @@ class _WriteNoteState extends State<WriteNote> {
                 await NotesDatabase.instance.insertNote(
                   MyNotes(
                       pin: false,
+                      isArchive: false,
+                      isDeleted: false,
                       title: title.text,
+                      uniqueId: uuid.v1(),
                       content: content.text,
                       createdTime: DateTime.now()),
                 );

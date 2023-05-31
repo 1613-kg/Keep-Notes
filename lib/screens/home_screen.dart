@@ -28,7 +28,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // createEntry(MyNotes(
+    //     pin: false,
+    //     isArchive: false,
+    //     isDeleted: false,
+    //     title: "Welcome",
+    //     content: "This is test",
+    //     uniqueId: "2",
+    //     createdTime: DateTime.now()));
     getAllNotes();
+  }
+
+  Future createEntry(MyNotes note) async {
+    await NotesDatabase.instance.insertNote(note);
   }
 
   Future getAllNotes() async {

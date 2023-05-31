@@ -1,3 +1,4 @@
+import 'package:notes/providers/firebase_db.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -10,7 +11,7 @@ class NotesDatabase {
 
   Future<Database?> get database async {
     if (_database != null) return _database;
-    _database = await _initializeDB('Notes.db');
+    _database = await _initializeDB('NewNotes.db');
     return _database;
   }
 
@@ -29,7 +30,10 @@ class NotesDatabase {
     await db.execute('''CREATE TABLE Notes(
       ${MyNotesImp.id} $idType,
       ${MyNotesImp.pin} $boolType,
+      ${MyNotesImp.isArchive} $boolType,
+      ${MyNotesImp.isDeleted} $boolType,
       ${MyNotesImp.title} $textType,
+      ${MyNotesImp.uniqueId} $textType,
       ${MyNotesImp.content} $textType,
       ${MyNotesImp.createdTime} $textType
   
@@ -39,6 +43,7 @@ class NotesDatabase {
   Future<MyNotes?> insertNote(MyNotes note) async {
     final db = await instance.database;
     final id = await db!.insert(MyNotesImp.TableName, note.toJson());
+    await FireDB().createNewNoteFirestore(note);
     return note.copy(id: id);
   }
 
@@ -64,14 +69,29 @@ class NotesDatabase {
   }
 
   Future updateNote(MyNotes note) async {
+    await FireDB().updateNoteFirestore(note);
     final db = await instance.database;
     await db!.update(MyNotesImp.TableName, note.toJson(),
         where: '${MyNotesImp.id} = ?', whereArgs: [note.id]);
   }
 
   Future deleteNote(MyNotes note) async {
+    await FireDB().deleteNoteFirestore(note);
     final db = await instance.database;
     await db!.delete(MyNotesImp.TableName,
+        where: '${MyNotesImp.id} = ?', whereArgs: [note.id]);
+  }
+
+  Future pinNote(MyNotes note) async {
+    final db = await instance.database;
+    await db!.update(MyNotesImp.TableName, {MyNotesImp.pin: note.pin ? 1 : 0},
+        where: '${MyNotesImp.id} = ?', whereArgs: [note.id]);
+  }
+
+  Future archiveNote(MyNotes note) async {
+    final db = await instance.database;
+    await db!.update(
+        MyNotesImp.TableName, {MyNotesImp.isArchive: note.isArchive ? 1 : 0},
         where: '${MyNotesImp.id} = ?', whereArgs: [note.id]);
   }
 

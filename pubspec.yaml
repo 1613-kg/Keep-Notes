@@ -44,6 +44,8 @@ dependencies:
   flutter_signin_button:
   shared_preferences:
   firebase_core:
+  cloud_firestore:
+  uuid:
 
 dev_dependencies:
   flutter_test:

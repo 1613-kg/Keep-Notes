@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:notes/providers/firebase_db.dart';
 import 'package:notes/providers/login_data.dart';
 import 'package:notes/screens/home_screen.dart';
 
@@ -32,6 +33,7 @@ class _LoginState extends State<Login> {
               LocalDataSaver.saveImg(currentUser!.photoURL.toString());
               LocalDataSaver.saveMail(currentUser.email.toString());
               LocalDataSaver.saveName(currentUser.displayName.toString());
+              await FireDB().getAllStoredNotes();
               Navigator.pushReplacementNamed(context, HomeScreen.routeName);
             })
           ],

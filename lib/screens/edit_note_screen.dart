@@ -34,9 +34,12 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
           IconButton(
               onPressed: () async {
                 await NotesDatabase.instance.updateNote(MyNotes(
-                    pin: false,
+                    pin: widget.note.pin,
+                    isArchive: widget.note.isArchive,
+                    isDeleted: widget.note.isDeleted,
                     title: title.text,
                     content: content.text,
+                    uniqueId: widget.note.uniqueId,
                     createdTime: DateTime.now(),
                     id: widget.note.id));
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
