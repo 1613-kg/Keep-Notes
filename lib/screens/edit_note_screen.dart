@@ -8,7 +8,8 @@ import '../models/colors.dart';
 class EditNoteScreen extends StatefulWidget {
   static const routeName = '/editNoteScreen';
   MyNotes note;
-  EditNoteScreen(this.note);
+  bool isGridView;
+  EditNoteScreen(this.note, this.isGridView);
 
   @override
   State<EditNoteScreen> createState() => _EditNoteScreenState();
@@ -42,7 +43,10 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     uniqueId: widget.note.uniqueId,
                     createdTime: DateTime.now(),
                     id: widget.note.id));
-                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName,
+                    arguments: {
+                      "isGridView": widget.isGridView,
+                    });
               },
               icon: Icon(
                 Icons.save_outlined,

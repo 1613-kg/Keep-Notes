@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:notes/screens/home_screen.dart';
+import 'package:notes/screens/ontap_screen.dart';
 
 import '../models/colors.dart';
 import '../models/notes_model.dart';
@@ -8,7 +9,8 @@ import '../screens/edit_note_screen.dart';
 
 class NotesView extends StatefulWidget {
   List<MyNotes> notesList;
-  NotesView(this.notesList);
+  bool isGridView;
+  NotesView(this.notesList, this.isGridView);
 
   @override
   State<NotesView> createState() => _NotesViewState();
@@ -57,15 +59,9 @@ class _NotesViewState extends State<NotesView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    EditNoteScreen(widget.notesList[index])));
-                      },
-                      onLongPress: () {
-                        setState(() {
-                          isPressed = true;
-                          Navigator.pushNamed(context, HomeScreen.routeName,
-                              arguments: {isPressed});
-                        });
+                                builder: (context) => OnTap(
+                                    widget.notesList[index],
+                                    widget.isGridView)));
                       },
                       child: Container(
                         padding: EdgeInsets.all(10),

@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ],
                 ),
-                isLoading ? Loading() : NotesView(SearchResultNotes),
+                isLoading ? Loading() : NotesView(SearchResultNotes, true),
               ],
             ),
           )),

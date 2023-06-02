@@ -41,13 +41,14 @@ class NotesDatabase {
   }
 
   Future<MyNotes?> insertNote(MyNotes note) async {
+    await FireDB().createNewNoteFirestore(note);
     final db = await instance.database;
     final id = await db!.insert(MyNotesImp.TableName, note.toJson());
-    await FireDB().createNewNoteFirestore(note);
     return note.copy(id: id);
   }
 
   Future<List<MyNotes>> getAllNotes() async {
+    await FireDB().getAllStoredNotes();
     final db = await instance.database;
     final orderBy = '${MyNotesImp.createdTime} ASC';
     final query_result =
@@ -83,15 +84,17 @@ class NotesDatabase {
   }
 
   Future pinNote(MyNotes note) async {
+    await FireDB().updateNoteFirestore(note);
     final db = await instance.database;
-    await db!.update(MyNotesImp.TableName, {MyNotesImp.pin: note.pin ? 1 : 0},
+    await db!.update(MyNotesImp.TableName, {MyNotesImp.pin: !note.pin ? 1 : 0},
         where: '${MyNotesImp.id} = ?', whereArgs: [note.id]);
   }
 
   Future archiveNote(MyNotes note) async {
+    await FireDB().updateNoteFirestore(note);
     final db = await instance.database;
     await db!.update(
-        MyNotesImp.TableName, {MyNotesImp.isArchive: note.isArchive ? 1 : 0},
+        MyNotesImp.TableName, {MyNotesImp.isArchive: !note.isArchive ? 1 : 0},
         where: '${MyNotesImp.id} = ?', whereArgs: [note.id]);
   }
 

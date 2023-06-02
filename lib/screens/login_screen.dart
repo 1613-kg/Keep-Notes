@@ -16,6 +16,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isGridView = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +35,10 @@ class _LoginState extends State<Login> {
               LocalDataSaver.saveMail(currentUser.email.toString());
               LocalDataSaver.saveName(currentUser.displayName.toString());
               await FireDB().getAllStoredNotes();
-              Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              Navigator.pushReplacementNamed(context, HomeScreen.routeName,
+                  arguments: {
+                    "isGridView": isGridView,
+                  });
             })
           ],
         ),

@@ -5,7 +5,6 @@ import 'package:notes/screens/write_note_screen.dart';
 import 'package:notes/widgets/loading.dart';
 import 'package:notes/widgets/notes_view_list.dart';
 
-import '../widgets/longPressedView.dart';
 import '../widgets/notes_view.dart';
 import '/models/notes_model.dart';
 import '/widgets/search_bar.dart';
@@ -26,16 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<ScaffoldState> _drawerkey = GlobalKey();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // createEntry(MyNotes(
-    //     pin: false,
-    //     isArchive: false,
-    //     isDeleted: false,
-    //     title: "Welcome",
-    //     content: "This is test",
-    //     uniqueId: "2",
-    //     createdTime: DateTime.now()));
     getAllNotes();
   }
 
@@ -44,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future getAllNotes() async {
-    this.notesList = await NotesDatabase.instance.getAllNotes();
     LocalDataSaver.getImg().then(
       (value) {
         if (this.mounted) {
@@ -54,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
+    this.notesList = await NotesDatabase.instance.getAllNotes();
     if (this.mounted) {
       setState(() {
         isLoading = false;
@@ -62,18 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget build(BuildContext context) {
-    bool isGridView = true;
-    bool isPressed = false;
-    // setState(() {
-    //   bool pressed = ModalRoute.of(context)?.settings.arguments as bool;
-    //   isPressed = pressed;
-    // });
+    final info = ModalRoute.of(context)?.settings.arguments as Map;
+    bool isGridView = info["isGridView"];
     return (isLoading)
         ? Loading()
         : Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, WriteNote.routeName);
+                Navigator.pushNamed(context, WriteNote.routeName, arguments: {
+                  "isGridView": isGridView,
+                });
               },
               child: Icon(
                 Icons.add,
@@ -91,18 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   child: Column(
                     children: [
-                      (isPressed)
-                          ? LongPressed()
-                          : SearchBox(
-                              _drawerkey,
-                              imgUrl.toString(),
-                            ),
+                      SearchBox(
+                        _drawerkey,
+                        imgUrl.toString(),
+                        isGridView,
+                      ),
                       SizedBox(
                         height: 10,
                       ),
                       (isGridView)
-                          ? NotesView(notesList)
-                          : NotesViewList(notesList),
+                          ? NotesView(notesList, isGridView)
+                          : NotesViewList(notesList, isGridView),
                     ],
                   ),
                 ),

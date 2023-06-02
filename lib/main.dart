@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:notes/screens/edit_note_screen.dart';
 import 'package:notes/screens/login_screen.dart';
+import 'package:notes/screens/ontap_screen.dart';
 import 'package:notes/screens/search_screen.dart';
 import 'package:notes/screens/write_note_screen.dart';
 
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         //EditNoteScreen.routeName: (ctx) => EditNoteScreen(),
         SearchScreen.routeName: (ctx) => SearchScreen(),
         Login.routeName: (ctx) => Login(),
+        //OnTap.routeName: (ctx) => OnTap(),
       },
     );
   }

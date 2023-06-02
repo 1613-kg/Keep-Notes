@@ -10,14 +10,14 @@ import '../models/colors.dart';
 class SearchBox extends StatefulWidget {
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
   String imgUrl;
-  SearchBox(this.drawerKey, this.imgUrl);
+  bool isGridView;
+  SearchBox(this.drawerKey, this.imgUrl, this.isGridView);
 
   @override
   State<SearchBox> createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<SearchBox> {
-  bool isGridView = true;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -76,7 +76,7 @@ class _SearchBarState extends State<SearchBox> {
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [
-                        (isGridView)
+                        (widget.isGridView)
                             ? TextButton(
                                 style: ButtonStyle(
                                     overlayColor:
@@ -88,14 +88,14 @@ class _SearchBarState extends State<SearchBox> {
                                       borderRadius: BorderRadius.circular(50.0),
                                     ))),
                                 onPressed: () {
-                                  // setState(() {
-                                  isGridView = false;
-                                  Navigator.pushReplacementNamed(
-                                      context, HomeScreen.routeName,
-                                      arguments: {
-                                        isGridView,
-                                      });
-                                  //});
+                                  setState(() {
+                                    widget.isGridView = !widget.isGridView;
+                                    Navigator.pushReplacementNamed(
+                                        context, HomeScreen.routeName,
+                                        arguments: {
+                                          "isGridView": widget.isGridView,
+                                        });
+                                  });
                                 },
                                 child: Icon(
                                   Icons.grid_view,
@@ -113,14 +113,14 @@ class _SearchBarState extends State<SearchBox> {
                                       borderRadius: BorderRadius.circular(50.0),
                                     ))),
                                 onPressed: () {
-                                  //setState(() {
-                                  isGridView = true;
-                                  Navigator.pushReplacementNamed(
-                                      context, HomeScreen.routeName,
-                                      arguments: {
-                                        isGridView,
-                                      });
-                                  //});
+                                  setState(() {
+                                    widget.isGridView = !widget.isGridView;
+                                    Navigator.pushReplacementNamed(
+                                        context, HomeScreen.routeName,
+                                        arguments: {
+                                          "isGridView": widget.isGridView,
+                                        });
+                                  });
                                 },
                                 child: Icon(
                                   Icons.list_alt_outlined,
@@ -140,7 +140,7 @@ class _SearchBarState extends State<SearchBox> {
                                     builder: (context) => Login()));
                           },
                           child: CircleAvatar(
-                            radius: 10,
+                            radius: 16,
                             backgroundColor: Colors.white,
                             backgroundImage:
                                 NetworkImage(widget.imgUrl.toString()),

@@ -14,8 +14,8 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  bool isLogin = false;
-
+  late bool isLogin;
+  bool isGridView = true;
   getLoginState() async {
     await LocalDataSaver.getLogData().then((value) {
       setState(() {
@@ -29,16 +29,18 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // TODO: implement initState
     super.initState();
     getLoginState();
+    Future.delayed(Duration(seconds: 2), () {
+      (isLogin)
+          ? Navigator.pushReplacementNamed(context, HomeScreen.routeName,
+              arguments: {
+                  "isGridView": isGridView,
+                })
+          : Navigator.pushReplacementNamed(context, Login.routeName);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 2), () {
-      (isLogin)
-          ? Navigator.pushReplacementNamed(context, HomeScreen.routeName)
-          : Navigator.pushReplacementNamed(context, Login.routeName);
-    });
-
     return Scaffold(
       backgroundColor: bgColor,
       body: Center(

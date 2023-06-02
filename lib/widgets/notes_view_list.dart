@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../screens/edit_note_screen.dart';
+import '../screens/home_screen.dart';
+import '../screens/ontap_screen.dart';
 import '/models/notes_model.dart';
 import '../models/colors.dart';
 
 class NotesViewList extends StatefulWidget {
   List<MyNotes> notesList;
+  bool isGridView;
   //const NotesViewList({super.key});
-  NotesViewList(this.notesList);
+  NotesViewList(this.notesList, this.isGridView);
 
   @override
   State<NotesViewList> createState() => _NotesViewListState();
@@ -50,7 +54,14 @@ class _NotesViewListState extends State<NotesViewList> {
                 // crossAxisCount: 4,
                 // staggeredTileBuilder: (index) => StaggeredTile.fit(2),
                 itemBuilder: (context, index) => InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OnTap(
+                                    widget.notesList[index],
+                                    widget.isGridView)));
+                      },
                       child: Container(
                         margin:
                             EdgeInsets.symmetric(horizontal: 5, vertical: 10),

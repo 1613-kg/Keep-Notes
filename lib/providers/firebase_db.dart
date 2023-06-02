@@ -20,6 +20,8 @@ class FireDB {
       "content": note.content,
       "date": note.createdTime,
       "uniqueId": note.uniqueId,
+      "pin": note.pin,
+      "archive": note.isArchive,
     }).then((_) {
       print("DATA ADDED SUCCESSFULLY");
     });
@@ -42,8 +44,8 @@ class FireDB {
             content: note["content"],
             uniqueId: note["uniqueId"],
             createdTime: DateTime.now(),
-            pin: false,
-            isArchive: false,
+            pin: note["pin"],
+            isArchive: note["archive"],
             isDeleted: false)); //Add Notes In Database
       });
     });
@@ -56,8 +58,12 @@ class FireDB {
         .doc(current_user!.email)
         .collection("usernotes")
         .doc(note.uniqueId.toString())
-        .update({"Title": note.title.toString(), "content": note.content}).then(
-            (_) {
+        .update({
+      "Title": note.title.toString(),
+      "content": note.content,
+      "pin": note.pin,
+      "archive": note.isArchive
+    }).then((_) {
       print("DATA ADDED SUCCESFULLY");
     });
   }

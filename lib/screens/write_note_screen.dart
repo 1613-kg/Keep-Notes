@@ -9,7 +9,6 @@ import '../models/colors.dart';
 class WriteNote extends StatefulWidget {
   static const routeName = '/WriteNote';
   const WriteNote({super.key});
-
   @override
   State<WriteNote> createState() => _WriteNoteState();
 }
@@ -30,6 +29,8 @@ class _WriteNoteState extends State<WriteNote> {
 
   @override
   Widget build(BuildContext context) {
+    final info = ModalRoute.of(context)?.settings.arguments as Map;
+    bool isGridView = info["isGridView"];
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -47,7 +48,10 @@ class _WriteNoteState extends State<WriteNote> {
                       content: content.text,
                       createdTime: DateTime.now()),
                 );
-                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName,
+                    arguments: {
+                      "isGridView": isGridView,
+                    });
               },
               icon: Icon(
                 Icons.save_outlined,
